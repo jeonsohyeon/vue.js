@@ -1,0 +1,13 @@
+{
+	"type": "Collection",
+	"properties": {
+		"todos": {
+			"name": "todos",
+			"type": "string",
+			"typeLabel": "string",
+			"required": true,
+			"id": "todos",
+			"order": 0
+		}
+	}
+}

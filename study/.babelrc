@@ -1,5 +1,5 @@
 {
-  "presets": [
+  "presets": [ //바벨 트랜스파일링 정의
     ["env", {
       "modules": false,
       "targets": {
