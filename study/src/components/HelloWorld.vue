@@ -8,7 +8,7 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
-      welcome:'aa'
+      welcome: 'aa'
     }
   },
   beforeCreate () {
