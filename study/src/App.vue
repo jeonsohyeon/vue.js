@@ -13,9 +13,26 @@
 
 
 AppHeader 를 여기서 app-header 로 .. 케밥 케이스로 바꿀 수 있따..
+
+전체 메모 개수에 대한 데이터를 app 컴포넌트 계층으로 올려보내
+appHeader 컴포넌트에 전달 해준다.
+
+app.vue : 자기 자신의 모델에  data () memoCount 를 갖고 있고
+memoApp.vue 가 있는 메모 개수 변수인 memos.length 를 직접 참조할 수는 있지만
+이렇게 서로 직접 접근하는건 의존성을 강하게 만들어서 피하는 편이 좋다.
+그래서 각각 자기자신의 모델을 가지고 동기화하는 방향.
+memoApp.vue : 메모가 발생시  change  이벤트를 발생 시키고
+현재 자신이 갖고 있는 메모의 개수를 이벤트의 콜백함수의 인자로 올려보낸다.
+this.$emit('change', this.memos.length); 처럼.
+
+이 이벤트의 콜백함수는  app.vue 로 넘어와서
+updateMemoCount 함수로 가는 것.
+
+<memo-app @change="updateMemoCount"> 이부분. 
+
 -->
-  <app-header></app-header>
-  <memo-app></memo-app>
+  <app-header :memo-count="memoCount"></app-header>
+  <memo-app @change="updateMemoCount"></memo-app>
 </div>
 </template>
 
@@ -28,6 +45,16 @@ AppHeader 를 여기서 app-header 로 .. 케밥 케이스로 바꿀 수 있따.
       //컴포넌트를 가져와서 등록한다.
       AppHeader,
       MemoApp
+    },
+    data () {
+      return {
+        memoCount : 0
+      }
+    },
+    methods : {
+      updateMemoCount (count){
+        this.memoCount = count;
+      }
     }
   }
 </script>

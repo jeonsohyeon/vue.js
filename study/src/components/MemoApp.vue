@@ -22,6 +22,7 @@ export default{
             //MemoForm에서 받은 데이터를 컴포넌트 내부 데이터에 추가.
             this.memos.push(payload);
             this.storeMemo();
+            this.$emit('change', this.memos.length);
         },
         storeMemo () {
             //내부 데이터를 문자열로 변환하고, 로컬 스토리지에 저장 한다.
@@ -35,6 +36,7 @@ export default{
             this.memos.splice(targetIndex, 1);
             //삭제 후 데이터를 다시 로컬 스토리지에 마찬가지로 저장한다.
             this.storeMemo();
+            this.$emit('change', this.memos.length);
         }
     },
     components : {
