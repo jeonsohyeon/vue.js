@@ -50,9 +50,9 @@ export default{
              //클릭 했을 때 클릭 메모의 id 를 부모 컴포넌트의 startEditing 에게 보낸다.
             const { id } = this.memo;
             this.$emit('startEditing', id);
-            //this.$nextTick(() => { //돔이 나온 후에 포커스 되도록..?
-            //    this.$refs.content.foucs();
-            //})
+            this.$nextTick(() => { //돔이 나온 후에 포커스 되도록..?
+               this.$refs.content.focus();
+            })
             //this.$refs.content.focus();
         },
         deleteMemo () {
@@ -64,7 +64,7 @@ export default{
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .memo-item{
     overflow:hidden;
     position:relative;
@@ -72,20 +72,20 @@ export default{
     border-radius:4px;
     background:#fff;
     list-style:none;
-}
-.memo-item .tit{
-    overflow:hidden;
-    background:#cdcdcd;
-}
-.memo-list .tit button{
-    float:right;
-    width:15px;
-    height:15px;
-    margin:10px;
-    text-indent:-10000px;
-    border-radius:25px;
-    background:#ff9e9d;
-    border:0;
+    .tit{
+        overflow:hidden;
+        background:#cdcdcd;
+        button{
+            float:right;
+            width:15px;
+            height:15px;
+            margin:10px;
+            text-indent:-10000px;
+            border-radius:25px;
+            background:#ff9e9d;
+            border:0;   
+        }
+    }
 }
 .memo-list strong{
     float:left;
@@ -94,11 +94,11 @@ export default{
 .memo-item .edit{
     border-top:1px solid #efefef;
     padding:20px;
-}
-.memo-item .edit input{
-    border:1px solid #efefef;
-    width:100%;
-    font-size:20px;
-    line-height:30px;
+    input{
+        border:1px solid #efefef;
+        width:100%;
+        font-size:20px;
+        line-height:30px;
+    }
 }
 </style>
