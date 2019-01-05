@@ -1,3 +1,35 @@
+<template>
+    <!--
+        addMemo 함수를 자식 컴포넌트 Memoform 의 이벤트를 수신할 수 있게 연결시켜주는것임...
+    -->
+    <div class="memo-app">    
+    <!-- <memo-form v-on:addMemo="addMemo"/> 와 같음.
+    v-on 은 돔 이벤트를 수식할 수 있게 도와주는 디렉티브.
+    @를 이용해 사용할 수 있다.
+    -->
+        <memo-form @addMemo="addMemo"/>
+        <!--
+            커스텀 엘리먼트로 memos 에 대한 데이터를 보여주는 곳
+        -->
+        <ul class="memo-list">
+            <memo v-for="memo in memos"
+                    :key="memo.id"
+                    :memo="memo"
+                    :editingId="editingId"
+                    @startEditing="startEditing"
+                    @endEditing="endEditing"
+                    @editMemo="editMemo"
+                    @deleteMemo="deleteMemo"/>
+        </ul>
+    </div>
+</template>
+
+<style scoped>
+.memo-list{
+    padding:20px 0;
+    margin:0;
+}
+</style>
 
 <script>
 import MemoForm from './MemoForm';
@@ -6,7 +38,8 @@ export default{
     name: 'MemoApp',
     data () {
         return {
-            memos : []
+            memos : [],
+            editingId : 0, //에디트 아이디 데이터 추가
         }
     },
     created () {
@@ -37,6 +70,22 @@ export default{
             //삭제 후 데이터를 다시 로컬 스토리지에 마찬가지로 저장한다.
             this.storeMemo();
             this.$emit('change', this.memos.length);
+        },
+        startEditing (id){
+            this.editingId = id;
+        },
+        endEditing (){
+            this.editingId = 0;
+        },
+        editMemo (payload){
+            const {id, content} = payload;
+            const targetIndex = this.memos.findIndex(v => v.id === id);
+            const targetMemo = this.memos[targetIndex];
+            this.memos.splice(targetIndex, 1, {
+                ...targetMemo, content
+            });
+            this.storeMemo();
+            this.endEditing();
         }
     },
     components : {
@@ -45,32 +94,3 @@ export default{
     }
 }
 </script>
-
-<template>
-    <!--
-        addMemo 함수를 자식 컴포넌트 Memoform 의 이벤트를 수신할 수 있게 연결시켜주는것임...
-    -->
-    <div class="memo-app">    
-    <!-- <memo-form v-on:addMemo="addMemo"/> 와 같음.
-    v-on 은 돔 이벤트를 수식할 수 있게 도와주는 디렉티브.
-    @를 이용해 사용할 수 있다.
-    -->
-        <memo-form @addMemo="addMemo"/>
-        <!--
-            커스텀 엘리먼트로 memos 에 대한 데이터를 보여주는 곳
-        -->
-        <ul class="memo-list">
-            <memo v-for="memo in memos"
-                    :key="memo.id"
-                    :memo="memo"
-                    @deleteMemo="deleteMemo"/>
-        </ul>
-    </div>
-</template>
-
-<style scoped>
-.memo-list{
-    padding:20px 0;
-    margin:0;
-}
-</style>
