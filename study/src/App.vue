@@ -39,6 +39,44 @@ updateMemoCount 함수로 가는 것.
 <script>
   import AppHeader from './components/AppHeader';
   import MemoApp from './components/MemoApp';
+  // import Vue from 'vue';
+  // import Vuex from 'vuex';
+  // import store from 'src/stores';
+  // import StoreTest from 'src/components/StoreTest';
+  // Vue.use(Vuex);
+  // const app = new Vue({
+  //   el : '#app',
+  //   store,
+  //   components : { StoreTest },
+  // })
+  // import store from 'src/store';
+  // const StoreTest = {
+  //   template = `<div>{{ count }}</div>`,
+  //   computed : {
+  //     count () {
+  //       return this.$store.state.count;
+  //     },
+  //     doneMemosCount () {
+  //       return this.$store.memos.filter(memo => memo.isDone).length;
+  //     }
+  //   }
+  // }
+  // const store = new Vuex.Store({
+  //   state : {
+  //     memos : [
+  //       { id : 1, text : '...', isDone : true},
+  //       { id : 2, text : '...', isDone : false},
+  //     ]
+  //   },
+  //   getters : {
+  //     doneMemos : state => {
+  //       return state.memos.filter(memo => memo.isDone);
+  //     },
+  //     doneMemosCount : (state, getters) => {
+  //       return this.$store.getters.doneMemos;
+  //     }
+  //   }
+  // })
   export default {
     name : 'app',
     components : {
