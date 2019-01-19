@@ -16,8 +16,6 @@
                     :key="memo.id"
                     :memo="memo"
                     :editingId="editingId"
-                    @startEditing="startEditing"
-                    @endEditing="endEditing"
                     @editMemo="editMemo"
                     @deleteMemo="deleteMemo"/>
         </ul>
@@ -34,6 +32,11 @@
 <script>
 import MemoForm from './MemoForm';
 import Memo from './Memo';
+import axios from 'axios';
+const memoAPICore = axios.create({
+    baseURL : '//localhost:2403/memos'
+});
+
 export default{
     name: 'MemoApp',
     data () {
@@ -48,44 +51,59 @@ export default{
             아니면 빈 배열로 초기화한다.
             보통 서버에서 데이터 받아오는데 여기선 서버 대신 로컬스토리지 쓰는것!!
         */
-        this.memos = localStorage.memos ? JSON.parse(localStorage.memos) : [];
+        //this.memos = localStorage.memos ? JSON.parse(localStorage.memos) : [];
+        /* axios 객체의 get 메소드로 디비 받아오기. */
+        memoAPICore.get('/')
+        .then(res => {
+            this.memos = res.data;
+        })
     },
     methods : {
         addMemo (payload){
             //MemoForm에서 받은 데이터를 컴포넌트 내부 데이터에 추가.
-            this.memos.push(payload);
-            this.storeMemo();
-            this.$emit('change', this.memos.length);
+            memoAPICore.post('/', payload)
+            .then(res =>{
+                this.memos.push(res.data);
+            })
+            // this.memos.push(payload);
+            // this.storeMemo();
+            // this.$emit('change', this.memos.length);
         },
-        storeMemo () {
-            //내부 데이터를 문자열로 변환하고, 로컬 스토리지에 저장 한다.
-            const memosToString = JSON.stringify(this.memos);
-            localStorage.setItem('memos', memosToString);
-        },
+        // storeMemo () {
+        //     //내부 데이터를 문자열로 변환하고, 로컬 스토리지에 저장 한다.
+        //     const memosToString = JSON.stringify(this.memos);
+        //     localStorage.setItem('memos', memosToString);
+        // },
         deleteMemo (id){
             //자식 컴포넌트에서 전달해주는 id 에 해당하는 메모 데이터의 인덱스를 찾는다.
             const targetIndex = this.memos.findIndex(v => v.id === id);
-            //찾은 인덱스 번호에 해당하는 메모 데이터를 삭제한다.
-            this.memos.splice(targetIndex, 1);
+            memoAPICore.delete(`/${id}`)
+            .then(()=>{
+                //찾은 인덱스 번호에 해당하는 메모 데이터를 삭제한다.
+                this.memos.splice(targetIndex, 1);
+            })
             //삭제 후 데이터를 다시 로컬 스토리지에 마찬가지로 저장한다.
-            this.storeMemo();
-            this.$emit('change', this.memos.length);
+            //this.storeMemo();
+            //this.$emit('change', this.memos.length);
         },
-        startEditing (id){
-            this.editingId = id;
-        },
-        endEditing (){
-            this.editingId = 0;
-        },
+        // startEditing (id){
+        //     this.editingId = id;
+        // },
+        // endEditing (){
+        //     this.editingId = 0;
+        // },
         editMemo (payload){
             const {id, content} = payload;
             const targetIndex = this.memos.findIndex(v => v.id === id);
             const targetMemo = this.memos[targetIndex];
-            this.memos.splice(targetIndex, 1, {
-                ...targetMemo, content
-            });
-            this.storeMemo();
-            this.endEditing();
+            memoAPICore.put(`/${id}`, {content})
+            .then(() => {
+                this.memos.splice(targetIndex, 1, {
+                    ...targetMemo, content
+                });
+            })
+            //this.storeMemo();
+           // this.endEditing();
         }
     },
     components : {

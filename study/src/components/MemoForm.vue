@@ -38,7 +38,7 @@
             },
             addMemo () {
                 //데이터의 고유한 식별자를 임시로 생성.
-                const id = new Date().getTime();
+                //const id = new Date().getTime();
                 //비구조화 할당 구문. 객체 속성을 해제하여 그 값을 각 변수에 담음.
                 const {title, content} = this;
                 
@@ -48,7 +48,7 @@
                     return false;
                 }
                 //emit 을 이용해서 데이터를 올린다....
-                this.$emit('addMemo', {id, title, content});
+                this.$emit('addMemo', {title, content});
                 this.resetFields(); //초기화.
             }
         }
